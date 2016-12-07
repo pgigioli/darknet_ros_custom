@@ -1,4 +1,9 @@
 #include "ROS_interface.h"
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/Image.h>
 #include <geometry_msgs/Point.h>
 #include <vector>
 #include <iostream>
@@ -7,7 +12,7 @@
 #include <face_tracker/templMatch.h>
 #include <face_tracker/imageArray.h>
 #include <std_msgs/Int8.h>
-#include <darknet_ros/bboxes.h>
+#include <darknet_ros_custom/bboxes.h>
 
 extern "C" {
   #include "box.h"
@@ -75,7 +80,7 @@ public:
       template_match_pub = nh.advertise<face_tracker::templMatch>("YOLO_templates", 1);
       found_object_pub = nh.advertise<std_msgs::Int8>("found_object", 1);
       cropped_faces_pub = nh.advertise<face_tracker::imageArray>("cropped_faces", 1);
-      face_bboxes_pub = nh.advertise<darknet_ros::bboxes>("face_bboxes", 1);
+      face_bboxes_pub = nh.advertise<darknet_ros_custom::bboxes>("face_bboxes", 1);
 
       namedWindow(OPENCV_WINDOW, WINDOW_NORMAL);
    }
@@ -238,7 +243,7 @@ private:
       // if at least one bbox found, define center point and draw box
       if (num > 0  && num <= 50) {
          vector<ROS_box> face_boxes;
-         darknet_ros::bboxes bboxes_msg;
+         darknet_ros_custom::bboxes bboxes_msg;
 
          int num_faces = 0;
 	 cout << "# Faces: " << num << endl;

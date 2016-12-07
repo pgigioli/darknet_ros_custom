@@ -16,6 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
    FILES
    bboxes.msg
+   bbox.msg
+   bbox_array.msg
 )
 
 generate_messages(
@@ -42,43 +44,6 @@ include_directories(
 link_directories(
   /usr/local/cuda/lib
 )
-
-#cuda_add_executable(ROS_interface 
-#  src/ROS_interface.cpp
-
-#  src/gemm.c 			src/utils.c 
-#  src/cuda.c 			src/deconvolutional_layer.c 
-#  src/convolutional_layer.c 	src/list.c 
-#  src/image.c 			src/activations.c 
-#  src/im2col.c 			src/col2im.c 
-#  src/blas.c 			src/crop_layer.c 
-#  src/dropout_layer.c 		src/maxpool_layer.c 
-#  src/softmax_layer.c 		src/data.c 
-#  src/matrix.c 			src/network.c 
-#  src/connected_layer.c 	src/cost_layer.c 
-#  src/parser.c 			src/option_list.c 
-#  src/detection_layer.c		src/tag.c 
-#  src/imagenet.c 		src/captcha.c 
-#  src/route_layer.c 		src/writing.c 
-#  src/box.c 			src/nightmare.c 
-#  src/normalization_layer.c 	src/avgpool_layer.c 
-#  src/coco.c 			src/dice.c 
-#  src/yolo.c 			src/layer.c 
-#  src/compare.c 		src/classifier.c  
-#  src/local_layer.c 		src/shortcut_layer.c 
-#  src/activation_layer.c	src/cifar.c
-#  src/coco_demo.c		src/swag.c
-#  src/crnn_layer.c		src/go.c
-#  src/rnn.c			src/rnn_layer.c
-#  src/rnn_vid.c			
-
-#  src/convolutional_kernels.cu  src/deconvolutional_kernels.cu 
-#  src/activation_kernels.cu 	src/im2col_kernels.cu 
-#  src/col2im_kernels.cu 	src/blas_kernels.cu 
-#  src/crop_layer_kernels.cu 	src/dropout_layer_kernels.cu 
-#  src/maxpool_layer_kernels.cu  src/softmax_layer_kernels.cu 
-#  src/network_kernels.cu 	src/avgpool_layer_kernels.cu 
-#  src/yolo_kernels.cu)
 
 cuda_add_executable(yolo_face_detector
   src/YOLO_face_detector.cpp
@@ -150,41 +115,6 @@ cuda_add_executable(yolo_person_detector
   src/network_kernels.cu        src/avgpool_layer_kernels.cu
   src/yolo_kernels_ROSobj_detector.cu)
 
-cuda_add_executable(yolo_object_detector
-  src/YOLO_object_detector.cpp
-
-  src/gemm.c                    src/utils.c
-  src/cuda.c                    src/deconvolutional_layer.c
-  src/convolutional_layer.c     src/list.c
-  src/image.c                   src/activations.c
-  src/im2col.c                  src/col2im.c
-  src/blas.c                    src/crop_layer.c
-  src/dropout_layer.c           src/maxpool_layer.c
-  src/softmax_layer.c           src/data.c
-  src/matrix.c                  src/network.c
-  src/connected_layer.c         src/cost_layer.c
-  src/parser.c                  src/option_list.c
-  src/detection_layer.c         src/tag.c
-  src/imagenet.c                src/captcha.c
-  src/route_layer.c             src/writing.c
-  src/box.c                     src/nightmare.c
-  src/normalization_layer.c     src/avgpool_layer.c
-  src/yolo_face_detector.c      src/layer.c
-  src/compare.c                 src/classifier.c
-  src/local_layer.c             src/shortcut_layer.c
-  src/activation_layer.c        src/cifar.c
-  src/crnn_layer.c              src/go.c
-  src/rnn.c                     src/rnn_layer.c
-  src/rnn_vid.c
-
-  src/convolutional_kernels.cu  src/deconvolutional_kernels.cu
-  src/activation_kernels.cu     src/im2col_kernels.cu
-  src/col2im_kernels.cu         src/blas_kernels.cu
-  src/crop_layer_kernels.cu     src/dropout_layer_kernels.cu
-  src/maxpool_layer_kernels.cu  src/softmax_layer_kernels.cu
-  src/network_kernels.cu        src/avgpool_layer_kernels.cu
-  src/yolo_kernels_ROSobj_detector.cu)
-
 cuda_add_executable(yolo_face_depth_detector
   src/YOLO_face_depth_detector.cpp
 
@@ -222,19 +152,7 @@ cuda_add_executable(yolo_face_depth_detector
 
 add_dependencies(yolo_face_detector face_tracker_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 add_dependencies(yolo_person_detector face_tracker_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(yolo_object_detector face_tracker_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 add_dependencies(yolo_face_depth_detector face_tracker_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-
-#target_link_libraries(ROS_interface
-#   m
-#   pthread
-#   stdc++
-#   cuda 
-#   cudart 
-#   cublas 
-#   curand
-#   ${catkin_LIBRARIES}
-#)
 
 target_link_libraries(yolo_face_detector
    m
@@ -248,17 +166,6 @@ target_link_libraries(yolo_face_detector
 )
 
 target_link_libraries(yolo_person_detector
-   m
-   pthread
-   stdc++
-   cuda
-   cudart
-   cublas
-   curand
-   ${catkin_LIBRARIES}
-)
-
-target_link_libraries(yolo_object_detector
    m
    pthread
    stdc++
